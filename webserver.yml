@@ -1,0 +1,38 @@
+---
+- name: webserver playbook
+  hosts: webserver
+
+  tasks:
+    - name: creating a web server
+      command: yum -y install httpd
+      state: present
+
+     - name: enabling httpd
+       service: 
+        name: httpd
+        state: started
+        enabled: yes 
+
+    - name: creating firewall
+      firewalld:
+        service: http
+        port: 80/tcp
+        permanent: true 
+        immediate: true 
+
+    - name: creating inde.html
+      lineinfile:
+        path: /var/www/html/index.html
+        line: hellow this is the ansible assignment
+        create: yes 
+
+    - name: create a user
+      user:
+        name: ansibleusr
+        shell: /bin/bash
+        comment: this is ansible
+        group: wheel
+        append: yes
+        home: /home/ansibleusr
+
+    
